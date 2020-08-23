@@ -1,0 +1,11 @@
+1. 
+In this project, I have had a time complexity of O(|V| + |E|) time for my DFS solution, since it goes through all the nodes and edges.
+As for the rest, the time complexity is O(n^2) since I haven't exceeded double for-loops.
+
+2. 
+We require that there are no cycles in the project. 
+If we do detect a cycle, then the project will not start.
+We also require a directed graph for this project.
+
+3. 
+For this implementation, I have used depth-first search.
