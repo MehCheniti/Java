@@ -1,6 +1,7 @@
 class SortertLenkeliste<T extends Comparable<T>> extends Lenkeliste<T>{
 
-  @Override public void leggTil(T x){
+  @Override
+  public void leggTil(T x){
     Node nyNode = new Node(x);
     if (stoerrelse() == 0){
       start.neste = nyNode;
@@ -38,7 +39,8 @@ class SortertLenkeliste<T extends Comparable<T>> extends Lenkeliste<T>{
     }
   }
 
-  @Override public T fjern(){
+  @Override
+  public T fjern(){
     if (stoerrelse() == 0){
       throw new UgyldigListeIndeks(-1);
     }
@@ -57,11 +59,13 @@ class SortertLenkeliste<T extends Comparable<T>> extends Lenkeliste<T>{
     }
   }
 
-  @Override public void sett(int pos, T x){
+  @Override
+  public void sett(int pos, T x){
     throw new UnsupportedOperationException();
   }
 
-  @Override public void leggTil(int pos, T x){
+  @Override
+  public void leggTil(int pos, T x){
     throw new UnsupportedOperationException();
   }
 
