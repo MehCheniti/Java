@@ -24,6 +24,7 @@ private Canvas canvas = new Canvas();
 private RenderHandler renderer;
 private SpriteSheet sheet;
 private SpriteSheet playerSheet;
+private int selectedTileID = 2;
 private Rectangle testRectangle = new Rectangle(30, 30, 100, 100);
 private Tiles tiles;
 private Map map;
@@ -77,10 +78,23 @@ private int yZoom = 3;
 
 		testRectangle.generateGraphics(3, 12345);
 
+		// Load SDK GUI.
+		GUIButton[] buttons = new GUIButton[tiles.size()];
+		Sprite[] tileSprites = tiles.getSprites();
+
+		for (int i = 0; i < buttons.length; i++){
+			Rectangle tileRectangle = new Rectangle(0, i * (16 * xZoom + 2), 16 *
+			xZoom, 16 * yZoom);
+			buttons[i] = new SDKButton(this, i, tileSprites[i], tileRectangle);
+		}
+
+		GUI gui = new GUI(buttons, 5, 5, true);
+
 		// Load objects.
-		objects = new GameObject[1];
+		objects = new GameObject[2];
 		player = new Player(playerAnimations);
 		objects[0] = player;
+		objects[1] = gui;
 
 		// Add listeners.
 		canvas.addKeyListener(keyListener);
@@ -115,9 +129,21 @@ private int yZoom = 3;
 	}
 
 	public void leftClick(int x, int y){
-		x = (int) Math.floor((x + renderer.getCamera().x) / (16.0 * xZoom));
-		y = (int) Math.floor((y + renderer.getCamera().y) / (16.0 * yZoom));
-		map.setTile(x, y, 2);
+		Rectangle mouseRectangle = new Rectangle(x, y, 1, 1);
+		boolean stoppedChecking = false;
+
+		for (int i = 0; i < objects.length; i++){
+			if (!stoppedChecking){
+				stoppedChecking = objects[i].handleMouseClick(mouseRectangle,
+				renderer.getCamera(), xZoom, yZoom);
+			}
+		}
+
+		if (!stoppedChecking){
+			x = (int) Math.floor((x + renderer.getCamera().x) / (16.0 * xZoom));
+			y = (int) Math.floor((y + renderer.getCamera().y) / (16.0 * yZoom));
+			map.setTile(x, y, selectedTileID);
+		}
 	}
 
 	public void rightClick(int x, int y){
@@ -140,6 +166,14 @@ private int yZoom = 3;
 		graphics.dispose();
 		bufferStrategy.show();
 		renderer.clear();
+	}
+
+	public void changeTile(int tileID){
+		selectedTileID = tileID;
+	}
+
+	public int getSelectedTile(){
+		return selectedTileID;
 	}
 
 	public void run(){

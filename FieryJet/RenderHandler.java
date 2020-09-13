@@ -27,37 +27,49 @@ private int[] pixels;
 
 	// Renders our image to our array of pixels.
 	public void renderImage(BufferedImage image, int xPosition, int yPosition,
-	int xZoom, int yZoom){
+	int xZoom, int yZoom, boolean fixed){
 		int[] imagePixels = ( (DataBufferInt)
 		image.getRaster().getDataBuffer()).getData();
 		renderArray(imagePixels, image.getWidth(), image.getHeight(), xPosition,
-		yPosition, xZoom, yZoom);
+		yPosition, xZoom, yZoom, fixed);
 	}
 
 	public void renderSprite(Sprite sprite, int xPosition, int yPosition,
-	int xZoom, int yZoom){
+	int xZoom, int yZoom, boolean fixed){
 		renderArray(sprite.getPixels(), sprite.getWidth(), sprite.getHeight(),
-		xPosition, yPosition, xZoom, yZoom);
+		xPosition, yPosition, xZoom, yZoom, fixed);
 	}
 
-	public void renderRectangle(Rectangle rectangle, int xZoom, int yZoom){
+	public void renderRectangle(Rectangle rectangle, int xZoom, int yZoom,
+	boolean fixed){
 		int[] rectanglePixels = rectangle.getPixels();
 
 		if (rectanglePixels != null){
 			renderArray(rectanglePixels, rectangle.w, rectangle.h, rectangle.x,
-			rectangle.y, xZoom, yZoom);
+			rectangle.y, xZoom, yZoom, fixed);
+		}
+	}
+
+	public void renderRectangle(Rectangle rectangle, Rectangle offset, int xZoom,
+	int yZoom, boolean fixed){
+		int[] rectanglePixels = rectangle.getPixels();
+
+		if (rectanglePixels != null){
+			renderArray(rectanglePixels, rectangle.w, rectangle.h, rectangle.x +
+			offset.x, rectangle.y + offset.y, xZoom, yZoom, fixed);
 		}
 	}
 
 	public void renderArray(int[] renderPixels, int renderWidth,
-	int renderHeight, int xPosition, int yPosition, int xZoom, int yZoom){
+	int renderHeight, int xPosition, int yPosition, int xZoom, int yZoom,
+	boolean fixed){
 		 for (int i = 0; i < renderHeight; i++){
  			for (int j = 0; j < renderWidth; j++){
  				for (int yZoomPosition = 0; yZoomPosition < yZoom; yZoomPosition++){
  					for (int xZoomPosition = 0; xZoomPosition < xZoom; xZoomPosition++){
  						setPixel(renderPixels[j + i * renderWidth], ((j * xZoom) +
 						xPosition + xZoomPosition), ((i * yZoom) + yPosition +
-						yZoomPosition));
+						yZoomPosition), fixed);
  					}
  				}
  			}
@@ -74,13 +86,22 @@ private int[] pixels;
 		}
 	}
 
-	private void setPixel(int pixel, int x, int y){
-		if (x >= camera.x && y >= camera.y && x <= camera.x + camera.w && y <=
-		camera.y + camera.h){
-			int pixelIndex = (x - camera.x) + (y - camera.y) * view.getWidth();
-			if (pixels.length > pixelIndex && pixel != Game.alpha){
-				pixels[pixelIndex] = pixel;
+	private void setPixel(int pixel, int x, int y, boolean fixed){
+		int pixelIndex = 0;
+
+		if (!fixed){
+			if (x >= camera.x && y >= camera.y && x <= camera.x + camera.w && y <=
+			camera.y + camera.h){
+				pixelIndex = (x - camera.x) + (y - camera.y) * view.getWidth();
 			}
+		} else{
+			if (x >= 0 && y >= 0 && x <= camera.w && y <= camera.h){
+				pixelIndex = x + y * view.getWidth();
+			}
+		}
+
+		if (pixels.length > pixelIndex && pixel != Game.alpha){
+			pixels[pixelIndex] = pixel;
 		}
 	}
 

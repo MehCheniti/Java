@@ -24,6 +24,18 @@ private int[] pixels;
     }
   }
 
+  public boolean intersects(Rectangle otherRectangle){
+    if (x > otherRectangle.x + otherRectangle.w || otherRectangle.x > x + w){
+      return false;
+    }
+
+    if (y > otherRectangle.y + otherRectangle.h || otherRectangle.y > y + h){
+      return false;
+    }
+
+    return true;
+  }
+
   public void generateGraphics(int borderWidth, int color){
     pixels = new int[w * h];
 
@@ -69,6 +81,10 @@ private int[] pixels;
     }
 
     return null;
+  }
+
+  public String toString(){
+    return "[" + x + ", " + y + ", " + w + ", " + h + "]";
   }
 
 }

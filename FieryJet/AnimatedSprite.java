@@ -52,6 +52,12 @@ private int endSprite;
     }
   }
 
+  // Called whenever the mouse is clicked on the canvas.
+  public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera,
+  int xZoom, int yZoom){
+    return false;
+  }
+
   public void reset(){
     counter = 0;
     currentSprite = startSprite;

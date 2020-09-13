@@ -31,12 +31,12 @@ private AnimatedSprite animatedSprite = null;
   public void render(RenderHandler renderer, int xZoom, int yZoom){
     if (animatedSprite != null){
       renderer.renderSprite(animatedSprite, playerRectangle.x,
-      playerRectangle.y, xZoom, yZoom);
+      playerRectangle.y, xZoom, yZoom, false);
     } else if (sprite != null){
       renderer.renderSprite(sprite, playerRectangle.x, playerRectangle.y,
-      xZoom, yZoom);
+      xZoom, yZoom, false);
     } else{
-      renderer.renderRectangle(playerRectangle, xZoom, yZoom);
+      renderer.renderRectangle(playerRectangle, xZoom, yZoom, false);
     }
   }
 
@@ -84,6 +84,12 @@ private AnimatedSprite animatedSprite = null;
     if (didMove){
       animatedSprite.update(game);
     }
+  }
+
+  // Called whenever the mouse is clicked on the canvas.
+  public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera,
+  int xZoom, int yZoom){
+    return false;
   }
 
   public void updateCamera(Rectangle camera){
