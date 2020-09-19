@@ -62,10 +62,10 @@ private int yZoom = 3;
 		sheet.loadSprites(16, 16);
 		BufferedImage playerSheetImage = loadImage("Player.png");
 		playerSheet = new SpriteSheet(playerSheetImage);
-		playerSheet.loadSprites(20, 26);
+		playerSheet.loadSprites(30, 47);
 
 		// Player animated sprites.
-		AnimatedSprite playerAnimations = new AnimatedSprite(playerSheet, 5);
+		AnimatedSprite playerAnimations = new AnimatedSprite(playerSheet, 17);
 
 		// Load tiles.
 		tiles = new Tiles(new File("Tiles.txt"), sheet);
